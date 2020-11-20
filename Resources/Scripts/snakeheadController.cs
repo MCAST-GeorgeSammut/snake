@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
-using UnityEngine;
+
 
 public class snakeheadController : MonoBehaviour
 {
@@ -28,11 +28,67 @@ public class snakeheadController : MonoBehaviour
     {
         while(true)
         {
+            Vector3 closestFoodPosition = findClosestFood();
+
+            if (mysnakegenerator.hitTail(this.transform.position, mysnakegenerator.snakelength))
+                {
+                    SceneManager.LoadScene("endScene");
+                }
+
+                if (this.transform.position.x < closestFoodPosition.x)
+                {
+                //   Debug.LogWarning("Closest food" + findClosestFood());
+                mysnakegenerator.savePosition();
+                    transform.position += new Vector3(1f, 0);
+                mysnakegenerator.drawTail(mysnakegenerator.snakelength);
+                checkBounds();
+                    myfoodgenerator.eatFood(this.transform.position);
+                Debug.Log(mysnakegenerator.hitTail(this.transform.position, mysnakegenerator.snakelength));
 
 
-            yield return null;
+            }
+
+                else if (this.transform.position.x > closestFoodPosition.x)
+                {
+                // Debug.LogWarning("Closest food" + findClosestFood());
+                mysnakegenerator.savePosition();
+                transform.position -= new Vector3(1f, 0);
+                mysnakegenerator.drawTail(mysnakegenerator.snakelength);
+                checkBounds();
+                    myfoodgenerator.eatFood(this.transform.position);
+                Debug.Log(mysnakegenerator.hitTail(this.transform.position, mysnakegenerator.snakelength));
+
+            }
+
+                else if(this.transform.position.y < closestFoodPosition.y)
+                {
+                // Debug.LogWarning("Closest food" + findClosestFood());
+                mysnakegenerator.savePosition();
+                transform.position += new Vector3(0, 1f);
+                mysnakegenerator.drawTail(mysnakegenerator.snakelength);
+                checkBounds();
+                    myfoodgenerator.eatFood(this.transform.position);
+                Debug.Log(mysnakegenerator.hitTail(this.transform.position, mysnakegenerator.snakelength));
+            }
+
+                else if (this.transform.position.y > closestFoodPosition.y)
+                {
+                //Debug.LogWarning("Closest food" + findClosestFood());
+                mysnakegenerator.savePosition();
+                transform.position -= new Vector3(0, 1f);
+                mysnakegenerator.drawTail(mysnakegenerator.snakelength);
+                checkBounds();
+                    myfoodgenerator.eatFood(this.transform.position);
+                    Debug.Log(mysnakegenerator.hitTail(this.transform.position, mysnakegenerator.snakelength));
+            }
+
+                yield return new WaitForSeconds(1f);
+            
+            
+
+           
         }
-        
+
     }
 
 

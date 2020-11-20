@@ -76,12 +76,8 @@ public class snakeGenerator : MonoBehaviour
 
     GameObject playerBox,breadcrumbBox,pathParent,timerUI,scoreUI;
     foodGenerator fgen;
-    snakeheadController snakeController;
+    
 
-
-    int pastpositionslimit = 100;
-
-    GameObject playerBox,breadcrumbBox,pathParent,timerUI;
 
     List<positionRecord> pastPositions;
 
@@ -254,7 +250,7 @@ public class snakeGenerator : MonoBehaviour
     }
 
 
-    void savePosition()
+    public void savePosition()
     {
         positionRecord currentBoxPos = new positionRecord();
 
@@ -303,7 +299,7 @@ public class snakeGenerator : MonoBehaviour
         }
     }
 
-    void drawTail(int length)
+    public void drawTail(int length)
     {
         clearTail();
 
@@ -382,7 +378,7 @@ public class snakeGenerator : MonoBehaviour
 
 
 
-    void clearTail()
+    public void clearTail()
     {
         cleanList();
         foreach (positionRecord p in pastPositions)
@@ -426,6 +422,7 @@ public class snakeGenerator : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            snakeheadController snakeController =playerBox.GetComponent<snakeheadController>();
             StartCoroutine(snakeController.automoveCoroutine());
           //  StartCoroutine(Task5());
         }

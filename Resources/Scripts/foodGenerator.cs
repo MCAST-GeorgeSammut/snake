@@ -36,7 +36,7 @@ public class foodGenerator : MonoBehaviour
         int foodIndex = allTheFood.IndexOf(snakeHeadPos);
 
         if (foodIndex != -1)
-        { 
+        {
             Destroy(allTheFood[foodIndex].BreadcrumbBox);
 
             //  allTheFood.RemoveAt(foodIndex);
@@ -44,41 +44,41 @@ public class foodGenerator : MonoBehaviour
             scoreManager.scoreValue++;
 
             sn.snakelength++;
-       
 
 
-        //if I have a list as follows
 
-        //1. = 0 positionRecord1 in Vector3(0f,0f);
-        //2. Vector3(1,0)
-        //3. VEctor3(2,0)
+            //if I have a list as follows
 
-        //indexof(0,0) = 0
+            //1. = 0 positionRecord1 in Vector3(0f,0f);
+            //2. Vector3(1,0)
+            //3. VEctor3(2,0)
 
-        //indexof(-5,2) = -1
+            //indexof(0,0) = 0
+
+            //indexof(-5,2) = -1
 
 
-        if (foodIndex != -1)
-        { 
+            if (foodIndex != -1)
+            {
 
-            Color foodColor;
+                Color foodColor;
 
-            foodColor = allTheFood[foodIndex].BreadcrumbBox.GetComponent<SpriteRenderer>().color;
+                foodColor = allTheFood[foodIndex].BreadcrumbBox.GetComponent<SpriteRenderer>().color;
 
-            sn.changeSnakeColor(sn.snakelength,foodColor);
+                sn.changeSnakeColor(sn.snakelength, foodColor);
 
-            Destroy(allTheFood[foodIndex].BreadcrumbBox);
+                Destroy(allTheFood[foodIndex].BreadcrumbBox);
 
-            allTheFood.RemoveAt(foodIndex);
+                allTheFood.RemoveAt(foodIndex);
 
-            sn.snakelength++;
+                sn.snakelength++;
+
+            }
+
+
 
         }
-
-
-
     }
-
 
     public IEnumerator generateFood()
     {
@@ -123,8 +123,6 @@ public class foodGenerator : MonoBehaviour
         }
     }
 
-    squareGenerator mysquareGenerator;
-
 
     // Start is called before the first frame update
     void Start()
@@ -166,4 +164,4 @@ public class foodGenerator : MonoBehaviour
 
     
 
-}
+
