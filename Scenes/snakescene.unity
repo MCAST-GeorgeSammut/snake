@@ -222,7 +222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snakelength: 10
-  firstrun: 1
+
 --- !u!114 &59512394
 MonoBehaviour:
   m_ObjectHideFlags: 0

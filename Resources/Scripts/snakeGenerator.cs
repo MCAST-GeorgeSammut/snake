@@ -5,16 +5,25 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-class positionRecord
+
+public class positionRecord
 {
     //the place where I've been
     Vector3 position;
     //at which point was I there?
     int positionOrder;
 
-    
+    //positionRecord{positionorder = 1, position = new Vector3(1f,1f);}
 
-    
+    //positionRecord2{positionorder = 1, position = new Vector3(1.5f,1f);}
+
+    //positionRecord == positionRecord2
+
+    //List<positionRecord>() myList
+
+    //positionRecord1,positionRecord2
+
+    //myList.Contains(positionRecord2); == true
 
     GameObject breadcrumbBox;
 
@@ -22,6 +31,11 @@ class positionRecord
     {
         this.BreadcrumbBox.GetComponent<SpriteRenderer>().color = Color.black;
     }
+
+//==
+//1.Equals(1) = true
+
+    //this method exists in every object in C sharp
 
     public override bool Equals(System.Object obj)
     {
@@ -38,14 +52,15 @@ class positionRecord
     {
         if (o == null)
             return false;
+
         Vector3 toCompare = o.position;
-            return Vector3.Distance(position,toCompare) < 2f;
-       
-       
+            return Vector3.Distance(position,toCompare) < 2f;   
     }
 
-
-
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 
     public Vector3 Position { get => position; set => position = value; }
     public int PositionOrder { get => positionOrder; set => positionOrder = value; }
@@ -57,20 +72,53 @@ public class snakeGenerator : MonoBehaviour
 
     public int snakelength;
 
-
     int pastpositionslimit = 100;
 
     GameObject playerBox,breadcrumbBox,pathParent,timerUI,scoreUI;
+    foodGenerator fgen;
+    snakeheadController snakeController;
+
+
+    int pastpositionslimit = 100;
+
+    GameObject playerBox,breadcrumbBox,pathParent,timerUI;
 
     List<positionRecord> pastPositions;
 
     int positionorder = 0;
 
+
     public bool firstrun = true;
+
+
+
+    Color snakeColor;
+
+
+
+    IEnumerator waitToGenerateFood()
+    {
+        while (true)
+        {
+            if (!firstrun)
+            {
+                StartCoroutine(fgen.generateFood());
+                break;
+            }
+
+            yield return null;
+
+        }
+        yield return null;
+    }
+
 
     // Start is called before the first frame update
     void Start()
     {
+
+        snakeColor = Color.green;
+
         playerBox = Instantiate(Resources.Load<GameObject>("Prefabs/Square"), new Vector3(0f, 0f), Quaternion.identity);
 
         timerUI = Instantiate(Resources.Load<GameObject>("Prefabs/Timer"), new Vector3(0f, 0f), Quaternion.identity);
@@ -80,7 +128,6 @@ public class snakeGenerator : MonoBehaviour
         //the default value for the timer is started
         timerUI.GetComponentInChildren<timerManager>().timerStarted = true;
         scoreUI.GetComponentInChildren<scoreManager>().scoreStarted = true;
-
 
         pathParent = new GameObject();
 
@@ -100,7 +147,12 @@ public class snakeGenerator : MonoBehaviour
 
         pastPositions = new List<positionRecord>();
 
+
         drawTail(snakelength);
+
+        fgen = Camera.main.GetComponent<foodGenerator>();
+
+        StartCoroutine(waitToGenerateFood());
     }
 
     //TASK 1: create a coroutine based on this code that when the X key is pressed, the box is going to go through
@@ -237,6 +289,20 @@ public class snakeGenerator : MonoBehaviour
         }
     }
 
+    public void changeSnakeColor(int length,Color color)
+    {
+        int tailStartIndex = pastPositions.Count - 1;
+        int tailEndIndex = tailStartIndex - length;
+        
+        snakeColor = color;
+
+        for (int snakeblocks = tailStartIndex;snakeblocks>tailEndIndex;snakeblocks--)
+        {
+        
+            pastPositions[snakeblocks].BreadcrumbBox.GetComponent<SpriteRenderer>().color = color;
+        }
+    }
+
     void drawTail(int length)
     {
         clearTail();
@@ -259,8 +325,10 @@ public class snakeGenerator : MonoBehaviour
                 Debug.Log(snakeblocks);
 
                 pastPositions[snakeblocks].BreadcrumbBox = Instantiate(breadcrumbBox, pastPositions[snakeblocks].Position, Quaternion.identity);
+
                 pastPositions[snakeblocks].BreadcrumbBox.GetComponent<SpriteRenderer>().color = Random.ColorHSV();
 
+                pastPositions[snakeblocks].BreadcrumbBox.GetComponent<SpriteRenderer>().color = snakeColor;
             }
 
         } 
@@ -326,6 +394,8 @@ public class snakeGenerator : MonoBehaviour
 
 
 
+
+
     void Update()
     {
         if (Input.anyKeyDown && !((Input.GetMouseButtonDown(0)
@@ -356,7 +426,8 @@ public class snakeGenerator : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(Task5());
+            StartCoroutine(snakeController.automoveCoroutine());
+          //  StartCoroutine(Task5());
         }
 
 
